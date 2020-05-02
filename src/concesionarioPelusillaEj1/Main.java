@@ -13,13 +13,14 @@ public class Main {
 		private static final String URL = "jdbc:mysql://localhost/concesionariopelusilla?serverTimezone=Europe/Madrid";
 		private static Connection connection = null;
 		private static int id;
+		private static String tabla = null;
 		private static String dato1 = null;
 		private static String dato2 = null;
 		private static String dato3 = null;
 		public static void main(String[] args) {
 			testConnect();
 			int option = menu();
-			selection(option, URL);
+			selection(option);
 			System.out.println(option);
 		}
 
@@ -32,13 +33,10 @@ public class Main {
 			}
 		}
 
-		private static void selection(int option, String URL) {
+		private static void selection(int option) {
 			switch(option) {
 			case 1:
 				int optionIn = menuInsert();
-				if(optionIn == 0) {
-					menu();
-				}else {
 				connection = null;
 				try {
 					connection = connect(URL);
@@ -46,10 +44,45 @@ public class Main {
 					System.out.println("No se ha podido conectar a la DB");
 					e.printStackTrace();
 				}
-					}
-				if(option == 1) {
+				if(optionIn == 1) {
+					tabla = "cochos";
 					menuInCocho();
-					PreparedStatement ps;
+					queryInsert();
+					menu();
+				}
+				if (optionIn == 2) {
+					tabla = "compradores";
+					menuInCompradores();
+					queryInsert();
+					menu();
+				}
+				break;
+			case 2:
+				
+				break;
+			case 3:
+				
+				break;
+			case 4:
+				break;
+			}
+		}
+
+			private static void menuInCompradores() {
+				System.out.println("Introduzca el nombre del comprador");
+				Scanner scan = new Scanner(System.in);
+				dato1 = scan.nextLine();
+				System.out.println("Introduzca los apellidos del comprador");
+				dato2 = scan.nextLine();
+				if(dato1 == "" || dato2 == "") {
+					System.out.println("ERROR: Introduzca los datos de nuevo");
+					menuInCompradores();
+				}
+		}
+
+			private static void queryInsert() {
+				PreparedStatement ps;
+				if(tabla == "cochos") {
 					try {
 						ps = connection.prepareStatement(
 								"INSERT INTO cochos (pata, alimentacion, numMarcado)"
@@ -63,19 +96,30 @@ public class Main {
 						e.printStackTrace();
 					}
 					System.out.println("Datos introducidos con éxito");
-					menu();
 				}
-				
-				break;
-			case 2:
-				
-				break;
-			case 3:
-				
-				break;
-			case 4:
-				break;
-			}
+				if(tabla == "compradores") {
+					try {
+						ps = connection.prepareStatement(
+								"INSERT INTO compradores (nombre, apellidos)"
+								+ "VALUES (?, ?)");
+						ps.setString(1, dato1);
+						ps.setString(2, dato2);
+						ps.executeUpdate();
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+					System.out.println("Datos introducidos con éxito");
+				}
+				}
+
+			private static int menuRead() {
+				System.out.println("¿De qué tabla desea leer info?");
+				System.out.println("1.Tabla cochos\n"
+						+ "2.Tabla compradores\n"
+						+ "0.Cancelar");
+				Scanner scan = new Scanner(System.in);
+				return scan.nextInt();
 		}
 
 			private static void menuInCocho() {
@@ -86,7 +130,7 @@ public class Main {
 				dato2 = scan.nextLine();
 				System.out.println("Introduzca número de marcado del cocho");
 				dato3 = scan.nextLine();
-				if(dato1 == "" || dato2 == "" || dato3 != "") {
+				if(dato1 == "" || dato2 == "" || dato3 == "") {
 					System.out.println("ERROR: Introduzca los datos de nuevo");
 					menuInCocho();
 				}
@@ -94,9 +138,10 @@ public class Main {
 
 			private static int menuInsert() {
 			System.out.println("¿En qué tabla desea insertar info?");
-			System.out.println("1.Tabla cochos\n"
+			System.out.print("1.Tabla cochos\n"
 					+ "2.Tabla compradores\n"
-					+ "0.Cancelar");
+					+ "0.Cancelar\n"
+					+ "Elección: ");
 			Scanner scan = new Scanner(System.in);
 			return scan.nextInt();
 		}
