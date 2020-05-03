@@ -3,7 +3,9 @@ package concesionarioPelusillaEj1;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 import com.mysql.cj.jdbc.DatabaseMetaData;
@@ -13,10 +15,12 @@ public class Main {
 		private static final String URL = "jdbc:mysql://localhost/concesionariopelusilla?serverTimezone=Europe/Madrid";
 		private static Connection connection = null;
 		private static int id;
-		private static String tabla = null;
+		private static int tabla;
 		private static String dato1 = null;
 		private static String dato2 = null;
 		private static String dato3 = null;
+		private static int optionSw;
+		private static Statement stmt;
 		public static void main(String[] args) {
 			testConnect();
 			int option = menu();
@@ -36,7 +40,7 @@ public class Main {
 		private static void selection(int option) {
 			switch(option) {
 			case 1:
-				int optionIn = menuInsert();
+				optionSw = menuInsert();
 				connection = null;
 				try {
 					connection = connect(URL);
@@ -44,21 +48,30 @@ public class Main {
 					System.out.println("No se ha podido conectar a la DB");
 					e.printStackTrace();
 				}
-				if(optionIn == 1) {
-					tabla = "cochos";
+				if(optionSw == 1) {
+					tabla = 1;
 					menuInCocho();
 					queryInsert();
 					menu();
 				}
-				if (optionIn == 2) {
-					tabla = "compradores";
+				if (optionSw == 2) {
+					tabla = 2;
 					menuInCompradores();
 					queryInsert();
 					menu();
 				}
 				break;
 			case 2:
-				
+				menuRead();
+				connection = null;
+				try {
+					connection = connect(URL);
+				} catch (SQLException e) {
+					System.out.println("No se ha podido conectar a la DB");
+					e.printStackTrace();
+				}
+					queryRead();
+					menu();
 				break;
 			case 3:
 				
@@ -66,6 +79,53 @@ public class Main {
 			case 4:
 				break;
 			}
+		}
+
+			private static void queryRead() {
+				if(tabla == 1) {
+					try {
+						stmt = connection.createStatement();
+						ResultSet rs = stmt.executeQuery("SELECT * FROM cochos");
+						 while(rs.next()){
+					        
+					         int id  = rs.getInt("id");
+					         String pata = rs.getString("pata");
+					         String alim = rs.getString("alimentacion");
+					         String num = rs.getString("numMarcado");
+
+					         System.out.println("");
+					         System.out.println("Id: " + id);
+					         System.out.println("Pata: " + pata);
+					         System.out.println("Alimentación: " + alim);
+					         System.out.println("NúmMarcado: " + num);
+					         System.out.println("-------------------");
+						 }
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+				}
+				if(tabla == 2) {
+					try {
+						stmt = connection.createStatement();
+						ResultSet rs = stmt.executeQuery("SELECT * FROM compradores");
+						 while(rs.next()){
+					        
+					         int id  = rs.getInt("id");
+					         String nombre = rs.getString("nombre");
+					         String ap = rs.getString("apellidos");
+
+					         System.out.println("");
+					         System.out.println("Id: " + id);
+					         System.out.println("Nombre: " + nombre);
+					         System.out.println("Apellidos: " + ap);
+					         System.out.println("-------------------");
+						 }
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+				}
 		}
 
 			private static void menuInCompradores() {
@@ -82,7 +142,7 @@ public class Main {
 
 			private static void queryInsert() {
 				PreparedStatement ps;
-				if(tabla == "cochos") {
+				if(tabla == 1) {
 					try {
 						ps = connection.prepareStatement(
 								"INSERT INTO cochos (pata, alimentacion, numMarcado)"
@@ -97,7 +157,7 @@ public class Main {
 					}
 					System.out.println("Datos introducidos con éxito");
 				}
-				if(tabla == "compradores") {
+				if(tabla == 2) {
 					try {
 						ps = connection.prepareStatement(
 								"INSERT INTO compradores (nombre, apellidos)"
@@ -113,13 +173,13 @@ public class Main {
 				}
 				}
 
-			private static int menuRead() {
+			private static void menuRead() {
 				System.out.println("¿De qué tabla desea leer info?");
 				System.out.println("1.Tabla cochos\n"
 						+ "2.Tabla compradores\n"
 						+ "0.Cancelar");
 				Scanner scan = new Scanner(System.in);
-				return scan.nextInt();
+				tabla = scan.nextInt();
 		}
 
 			private static void menuInCocho() {
