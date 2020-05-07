@@ -85,12 +85,61 @@ public class Main {
 					queryCochoUp(tabla);
 				break;
 			case 4:
+				menuDel();
+				connection = null;
+				try {
+					connection = connect(URL);
+				} catch (SQLException e) {
+					System.out.println("No se ha podido conectar a la DB");
+					e.printStackTrace();
+				}
+					queryCochoDel(tabla);
 				break;
 			}
 		}
 
+			private static void queryCochoDel(int tabla2) {
+				getId();
+				PreparedStatement ps;
+				if (tabla==1) {
+					try {
+						ps = connection.prepareStatement(
+								 "DELETE FROM cochos "
+								 + "WHERE id = ?");
+						ps.setInt(1, id);
+						ps.executeUpdate();
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+					System.out.println("Datos actualizados con éxito");
+				}
+				if (tabla==2) {
+					try {
+						ps = connection.prepareStatement(
+								 "DELETE FROM compradores "
+								 + "WHERE id = ?");
+						ps.setInt(1, id);
+						ps.executeUpdate();
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+					System.out.println("Datos actualizados con éxito");
+				}
+		}
+
+			private static void menuDel() {
+				System.out.print("¿En qué tabla desea borrar info?\n"
+						+ "1. Tabla cochos\n"
+						+ "2. Tabla compradores\n"
+						+ "Elección: ");
+				Scanner scan = new Scanner(System.in);
+				tabla = scan.nextInt();
+		}
+
 			private static void queryCochoUp(int tabla) {
-				getIdUp();
+				getId();
 				PreparedStatement ps;
 				if (tabla==1) {
 					menuInCocho();
@@ -129,13 +178,13 @@ public class Main {
 				}
 		}
 
-			private static void getIdUp() {
-				System.out.println("Introduzca la id a modificar");
+			private static void getId() {
+				System.out.println("Introduzca la id");
 				Scanner scan = new Scanner(System.in);
 				id = scan.nextInt();
 				if(id <= 0) {
 					System.out.println("Introduzca una id válida");
-					getIdUp();
+					getId();
 				}
 			}
 
