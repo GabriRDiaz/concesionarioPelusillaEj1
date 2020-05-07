@@ -74,11 +74,86 @@ public class Main {
 					menu();
 				break;
 			case 3:
-				
+				menuUp();
+				connection = null;
+				try {
+					connection = connect(URL);
+				} catch (SQLException e) {
+					System.out.println("No se ha podido conectar a la DB");
+					e.printStackTrace();
+				}
+					queryCochoUp(tabla);
 				break;
 			case 4:
 				break;
 			}
+		}
+
+			private static void queryCochoUp(int tabla) {
+				getIdUp();
+				PreparedStatement ps;
+				if (tabla==1) {
+					menuInCocho();
+					try {
+						ps = connection.prepareStatement(
+								 "UPDATE cochos "
+								 + "SET pata = ?, alimentacion = ?, numMarcado = ? "
+								 + "WHERE id = ?");
+						ps.setString(1, dato1);
+						ps.setString(2, dato2);
+						ps.setString(3, dato3);
+						ps.setInt(4, id);
+						ps.executeUpdate();
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+					System.out.println("Datos actualizados con éxito");
+				}
+				if (tabla==2) {
+					menuInCompradores();
+					try {
+						ps = connection.prepareStatement(
+								 "UPDATE compradores "
+								 + "SET nombre = ?, apellidos = ?"
+								 + "WHERE id = ?");
+						ps.setString(1, dato1);
+						ps.setString(2, dato2);
+						ps.setInt(3, id);
+						ps.executeUpdate();
+					} catch (SQLException e) {
+						System.out.println("ERROR");
+						e.printStackTrace();
+					}
+					System.out.println("Datos actualizados con éxito");
+				}
+		}
+
+			private static void getIdUp() {
+				System.out.println("Introduzca la id a modificar");
+				Scanner scan = new Scanner(System.in);
+				id = scan.nextInt();
+				if(id <= 0) {
+					System.out.println("Introduzca una id válida");
+					getIdUp();
+				}
+			}
+
+			private static int cochoUp() {
+			System.out.println("Datos a modificar\n"
+					+ "---------------");
+			System.out.print("Id del registro: ");
+			Scanner scan = new Scanner(System.in);
+			return scan.nextInt();
+		}
+
+			private static void menuUp() {
+			System.out.print("¿En qué tabla desea efectuar cambios?\n"
+					+ "1. Tabla cochos\n"
+					+ "2. Tabla compradores\n"
+					+ "Elección: ");
+			Scanner scan = new Scanner(System.in);
+			tabla = scan.nextInt();
 		}
 
 			private static void queryRead() {
