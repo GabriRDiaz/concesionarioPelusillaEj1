@@ -55,7 +55,7 @@ public class Main {
 	}
 
 	private static void menuSearch() {
-		System.out.print("Escriba el número de marcado: ");
+		System.out.print("\nEscriba el número de marcado: ");
 		Scanner scan = new Scanner(System.in);
 		dato1 = scan.nextLine();
 		testConnect();
@@ -180,7 +180,7 @@ public class Main {
 			System.out.println("ERROR");
 			e.printStackTrace();
 		}
-		System.out.println("Datos actualizados con éxito");
+		actualizadoExito();
 	}
 
 	private static void updateCocho() {
@@ -207,7 +207,7 @@ public class Main {
 			System.out.println("ERROR");
 			e.printStackTrace();
 		}
-		System.out.println("Datos actualizados con éxito");
+		actualizadoExito();
 	}
 
 	private static void menuRead() {
@@ -315,7 +315,7 @@ public class Main {
 			System.out.println("ERROR");
 			e.printStackTrace();
 		}
-		System.out.println("Datos actualizados con éxito \n");
+		actualizadoExito();
 	}
 
 	private static void insertCocho() {
@@ -333,7 +333,7 @@ public class Main {
 			System.out.println("ERROR");
 			e.printStackTrace();
 		}
-		System.out.println("Datos actualizados con éxito \n");
+		actualizadoExito();
 	}
 
 	private static int menuSelQuery() {
@@ -373,7 +373,7 @@ public class Main {
 		}
 	}
 	private static void datosCocho() {
-		System.out.println("Introduzca tipo de pata del cocho");
+		System.out.println("\nIntroduzca tipo de pata del cocho");
 		Scanner scan = new Scanner(System.in);
 		dato1 = scan.nextLine();
 		System.out.println("Introduzca tipo de alimentación del cocho");
@@ -386,7 +386,7 @@ public class Main {
 		}
 	}
 	private static void datosComprador() {
-		System.out.println("Introduzca el nombre del comprador");
+		System.out.println("\nIntroduzca el nombre del comprador");
 		Scanner scan = new Scanner(System.in);
 		dato1 = scan.nextLine();
 		System.out.println("Introduzca los apellidos del comprador");
@@ -397,7 +397,7 @@ public class Main {
 		}
 	}
 	private static void getId() {
-		System.out.println("Datos a modificar\n" + "---------------");
+		System.out.println("\nDatos a modificar\n" + "---------------");
 		System.out.print("Id del registro: ");
 		Scanner scan = new Scanner(System.in);
 		id = scan.nextInt();
@@ -410,5 +410,8 @@ public class Main {
 				+ "Elección: ");
 		Scanner scan = new Scanner(System.in);
 		tabla = scan.nextInt();
+	}
+	private static void actualizadoExito(){
+		System.out.println("\nDatos actualizados con éxito\n");
 	}
 }
