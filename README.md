@@ -2,7 +2,11 @@
 
 Este programa ejecuta las funciones INSERT, SELECT, UPDATE, DELETE sobre una base de datos.
 
-# Script de la base de datos:
+# Info DB:
+
+CREATE DATABASE concesionariopelusilla;
+
+# Script DB:
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
