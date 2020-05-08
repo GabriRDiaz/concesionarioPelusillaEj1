@@ -233,8 +233,10 @@ public class Main {
 	private static void readComprador() {
 		testConnect();
 		try {
-			Statement smtm = connection.createStatement();
-			ResultSet rs = smtm.executeQuery("SELECT * FROM compradores");
+			ps = connection.prepareStatement(
+					"SELECT * "
+					+ "FROM compradores");
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String nombre = rs.getString("nombre");
@@ -255,8 +257,10 @@ public class Main {
 	private static void readCocho() {
 		testConnect();
 		try {
-			Statement smtm = connection.createStatement();
-			ResultSet rs = smtm.executeQuery("SELECT * FROM cochos");
+			ps = connection.prepareStatement(
+					"SELECT * "
+					+ "FROM compradores");
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 
 				int id = rs.getInt("id");
